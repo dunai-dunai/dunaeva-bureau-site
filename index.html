@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DUNAEVA BUREAU — бюро дизайна интерьеров</title>
+  <meta name="description" content="DUNAEVA BUREAU — бюро дизайна интерьеров. Интерьер как мизансцена жизни.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+    { "imports": { "three": "./vendor/three.module.js" } }
+  </script>
+</head>
+<body>
+  <div class="loader" id="loader">
+    <div class="loader__bar"><span></span></div>
+    <div class="loader__name">DUNAEVA BUREAU</div>
+  </div>
+
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav">
+    <a class="nav__logo" href="#hero" data-goto="0"><i></i>DUNAEVA BUREAU</a>
+    <nav class="nav__links" id="navLinks">
+      <a href="#approach" data-goto="1" data-i18n="nav.approach">Подход</a>
+      <a href="#projects" data-goto="2" data-i18n="nav.projects">Проекты</a>
+      <a href="#process" data-goto="3" data-i18n="nav.process">Как мы работаем</a>
+      <a href="#pricing" data-goto="4" data-i18n="nav.pricing">Стоимость</a>
+      <a href="#about" data-goto="5" data-i18n="nav.about">О бюро</a>
+      <a href="#contacts" data-goto="6" data-i18n="nav.contacts">Контакты</a>
+    </nav>
+    <button class="nav__lang" id="langBtn" type="button">English</button>
+    <button class="nav__burger" id="burger" type="button" aria-label="Меню"><span></span><span></span></button>
+  </header>
+
+  <aside class="ruler" aria-hidden="true"><div class="ruler__track" id="rulerTrack"></div></aside>
+
+  <div class="counter" aria-hidden="true">
+    <span class="counter__cur" id="counterCur">01</span>
+    <span class="counter__sep"></span>
+    <span class="counter__name" id="counterName">Интерьер</span>
+  </div>
+  <div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
+
+  <main id="track">
+    <!-- 0 -->
+    <section class="slot" id="hero" data-vh="200" data-name="nav.hero">
+      <div class="panel panel--hero">
+        <p class="kicker r" style="--i:0" data-i18n="hero.kicker">Бюро дизайна интерьеров</p>
+        <h1 class="r" style="--i:1" data-i18n="hero.title">Интерьер как мизансцена жизни</h1>
+        <p class="lead r" style="--i:2" data-i18n="hero.lead">Проектируем пространства, в которых каждая сцена дня — утро, работа, ужин, тишина — поставлена точно.</p>
+        <p class="hint r" style="--i:3"><span class="hint__line"></span><span data-i18n="hero.hint">Листайте — пройдём сквозь пространство</span></p>
+      </div>
+    </section>
+
+    <!-- 1 -->
+    <section class="slot" id="approach" data-vh="230" data-name="nav.approach">
+      <div class="panel panel--left">
+        <p class="kicker r" style="--i:0">01 — <span data-i18n="nav.approach">Подход</span></p>
+        <h2 class="r" style="--i:1" data-i18n="approach.title">Сначала сценарий, потом мебель</h2>
+        <p class="lead r" style="--i:2" data-i18n="approach.lead">Мы начинаем с того, как вы живёте: где задерживаетесь, как двигаетесь, откуда падает свет.</p>
+      </div>
+      <div class="panel panel--trio">
+        <div class="trio__item r" style="--i:2"><b data-i18n="approach.t1">Свет</b><span data-i18n="approach.d1">Строим интерьер вокруг дневного и вечернего света.</span></div>
+        <div class="trio__item r" style="--i:3"><b data-i18n="approach.t2">Материал</b><span data-i18n="approach.d2">Камень, дерево, лён и металл — фактуры, которые красиво стареют.</span></div>
+        <div class="trio__item r" style="--i:4"><b data-i18n="approach.t3">Пропорция</b><span data-i18n="approach.d3">Выверенный ритм и масштаб вместо декора ради декора.</span></div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="slot" id="projects" data-vh="420" data-name="nav.projects">
+      <div class="panel panel--left">
+        <p class="kicker r" style="--i:0">02 — <span data-i18n="nav.projects">Проекты</span></p>
+        <h2 class="r" style="--i:1" data-i18n="projects.title">Три сцены — три характера</h2>
+        <ol class="list r" style="--i:2" id="projectList">
+          <li data-step="1"><em>01</em><div><b data-i18n="projects.p1">Городская квартира · 120 м²</b><span data-i18n="projects.p1d">Тёплый минимализм: дуб, лён, терракотовый акцент.</span></div></li>
+          <li data-step="2"><em>02</em><div><b data-i18n="projects.p2">Загородный дом · 340 м²</b><span data-i18n="projects.p2d">Графит, орех и латунь — вечерний сценарий дома.</span></div></li>
+          <li data-step="3"><em>03</em><div><b data-i18n="projects.p3">Апартаменты · 78 м²</b><span data-i18n="projects.p3d">Светлое пространство, зонированное светом.</span></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="slot" id="process" data-vh="440" data-name="nav.process">
+      <div class="panel panel--right">
+        <p class="kicker r" style="--i:0">03 — <span data-i18n="nav.process">Как мы работаем</span></p>
+        <h2 class="r" style="--i:1" data-i18n="process.title">Пять шагов к готовому дому</h2>
+        <ol class="list r" style="--i:2" id="processList">
+          <li data-step="0"><em>01</em><div><b data-i18n="process.s1">Знакомство и бриф</b><span data-i18n="process.s1d">Встреча, обмеры, разговор о сценариях жизни.</span></div></li>
+          <li data-step="1"><em>02</em><div><b data-i18n="process.s2">Концепция</b><span data-i18n="process.s2d">Планировка, коллажи, 3D-визуализации ключевых зон.</span></div></li>
+          <li data-step="2"><em>03</em><div><b data-i18n="process.s3">Рабочий проект</b><span data-i18n="process.s3d">Чертежи, развёртки и спецификации для строителей.</span></div></li>
+          <li data-step="3"><em>04</em><div><b data-i18n="process.s4">Комплектация</b><span data-i18n="process.s4d">Подбор и заказ мебели, света и материалов.</span></div></li>
+          <li data-step="4"><em>05</em><div><b data-i18n="process.s5">Авторский надзор</b><span data-i18n="process.s5d">Сопровождаем стройку до последней детали.</span></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 4 -->
+    <section class="slot" id="pricing" data-vh="250" data-name="nav.pricing">
+      <div class="panel panel--top">
+        <p class="kicker r" style="--i:0">04 — <span data-i18n="nav.pricing">Стоимость</span></p>
+        <h2 class="r" style="--i:1" data-i18n="pricing.title">Три формата работы</h2>
+      </div>
+      <div class="panel panel--tiers">
+        <div class="tier r" style="--i:2"><i>A</i><b data-i18n="pricing.a">Концепция</b><span data-i18n="pricing.ad">Планировка, стилистика, визуализации ключевых зон</span><strong data-i18n="pricing.ap">от 2 500 ₽/м²</strong></div>
+        <div class="tier r" style="--i:3"><i>B</i><b data-i18n="pricing.b">Дизайн-проект</b><span data-i18n="pricing.bd">Полный комплект чертежей и визуализаций</span><strong data-i18n="pricing.bp">от 4 500 ₽/м²</strong></div>
+        <div class="tier r" style="--i:4"><i>C</i><b data-i18n="pricing.c">Под ключ</b><span data-i18n="pricing.cd">Проект, комплектация и авторский надзор</span><strong data-i18n="pricing.cp">от 7 000 ₽/м²</strong></div>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="slot" id="about" data-vh="240" data-name="nav.about">
+      <div class="panel panel--right">
+        <p class="kicker r" style="--i:0">05 — <span data-i18n="nav.about">О бюро</span></p>
+        <h2 class="r" style="--i:1" data-i18n="about.title">Небольшое бюро с личным участием</h2>
+        <p class="lead r" style="--i:2" data-i18n="about.lead">DUNAEVA BUREAU проектирует жилые и общественные интерьеры и ведёт каждый проект от первой встречи до финальной расстановки предметов.</p>
+        <ul class="facts r" style="--i:3">
+          <li data-i18n="about.f1">Один руководитель на весь проект</li>
+          <li data-i18n="about.f2">Работаем по России и за рубежом</li>
+          <li data-i18n="about.f3">Онлайн и на объекте</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="slot" id="contacts" data-vh="170" data-name="nav.contacts">
+      <div class="panel panel--contact">
+        <p class="kicker r" style="--i:0">06 — <span data-i18n="nav.contacts">Контакты</span></p>
+        <h2 class="r" style="--i:1" data-i18n="contacts.title">Обсудим ваше пространство</h2>
+        <form class="form r" style="--i:2" id="contactForm">
+          <input name="name" required data-i18n-ph="contacts.name" placeholder="Имя">
+          <input name="contact" required data-i18n-ph="contacts.contact" placeholder="Телефон или e-mail">
+          <textarea name="msg" rows="3" data-i18n-ph="contacts.msg" placeholder="Коротко о проекте: тип, площадь, город"></textarea>
+          <button type="submit"><span data-i18n="contacts.send">Отправить заявку</span><i></i></button>
+        </form>
+        <p class="contacts r" style="--i:3" id="contactLines"></p>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
