@@ -332,7 +332,9 @@ def build():
     place('Золотая смальта', sm, sm.split()[3], 1180, 1120, thick=12, side=.45, rot=-6)
     # 6 lilac fluted glass, overlapping the cement tile
     w, h = 540, 760
-    place('Лиловое стекло', tex_glass(w, h), Image.new('L', (w, h), 255), 2420, 560, thick=22, side=.8, rot=-4, shadow=.14, side_alpha=.55)
+    gl = Image.open(os.path.join(ROOT, 'cutouts', 'glass-lilac.png')).convert('RGBA')
+    gl = gl.crop(gl.getbbox()); gl = gl.resize((int(gl.width * .62), int(gl.height * .62)), Image.LANCZOS)
+    place('Лиловое стекло', gl, gl.split()[3].point(lambda q: 255 if q else 0), 2420, 560, thick=0, rot=-4, shadow=.10, lift=.6)
     # 7 stripe velvet (black + milk)
     st = tex_stripe_velvet(); st = st.resize((int(st.width * .85), int(st.height * .85)), Image.LANCZOS)
     place('Бархат в полоску', st, rrect_mask(st.width, st.height, 16), 2700, 1560, thick=6, side=.5, rot=7, lift=.9)
@@ -362,11 +364,11 @@ def build():
 
 LABEL_TEXT = {
     'Лепнина': 'лепнина · гипс', 'Паркет': 'паркет · дуб, ёлочка', 'Цементная плитка': 'плитка · цемент',
-    'Бархат': 'бархат · мохер, горчичный', 'Золотая смальта': 'смальта · золото', 'Лиловое стекло': 'стекло · лиловое, рифлёное',
+    'Бархат': 'бархат · мохер, горчичный', 'Золотая смальта': 'смальта · золото', 'Лиловое стекло': 'стекло · лиловое, тонированное',
     'Бархат в полоску': 'бархат · чёрный и молочный', 'Ковёр': 'ковёр · горчичный ворс', 'Латунь': 'латунь',
     'Зеркальная сталь': 'сталь · зеркальная, выбивка',
 }
-LABEL_NUDGE = {'Лиловое стекло': (60, 110), 'Цементная плитка': (0, 0)}
+LABEL_NUDGE = {'Лиловое стекло': (330, -10), 'Цементная плитка': (0, 0)}
 
 F_IT = ('CormorantGaramond-Italic', 'CormorantGaramond-Italic.ttf', 400)
 F_DISP = ('CormorantGaramond-Light', 'CormorantGaramond.ttf', 300)
