@@ -216,87 +216,6 @@ def shadow(size=CELL, pad=90, blur=28, opacity=0.30):
     return rgba
 
 
-# ---------------------------------------------------------------- spec
-GRID_X0 = W - 180 - (4 * CELL + 3 * 64)   # 1216
-COLS = [GRID_X0 + i * (CELL + 64) for i in range(4)]
-ROWS = [470, 470 + CELL + 300]
-
-SWATCHES = [
-    ('01', 'Лепнина', ['гипс, тёплая белая', 'матовая краска'], 'потолки · карнизы', sw_stucco),
-    ('02', 'Лиловое стекло', ['рифлёное и гладкое,', 'тонированное'], 'ресепшен · кабины', sw_glass),
-    ('03', 'Паркет «ёлочка»', ['дуб, медовый тон,', 'масло'], 'рабочая зона', sw_parquet),
-    ('04', 'Бархат', ['мохер, горчичный'], 'кресло с оттоманкой', sw_velvet),
-    ('05', 'Цементная плитка', ['графит и беж,', 'диагональ'], 'мини-кухня', sw_cement),
-    ('06', 'Латунь', ['шлифованная,', 'тёплый тон'], 'детали · свет · панно', sw_brass),
-    ('07', 'Золотая смальта', ['мозаика в духе', '«Новослободской»'], 'панно', sw_smalt),
-    ('08', 'Хром', ['полированная сталь,', 'зеркальный блеск'], 'рабочие кресла', sw_chrome),
-]
-
-PALETTE = [
-    ('Тёплый белый', '#EFE6DC'), ('Лиловое стекло', '#B79AC8'),
-    ('Медовый дуб', '#C8976A'), ('Горчичный', '#B57E1F'),
-    ('Латунь', '#B08D57'), ('Бирюза', '#1F8A93'),
-    ('Графит', '#3B4046'), ('Хром', '#C4C8CE'),
-]
-
-F_DISPLAY = ('CormorantGaramond-Light', 'CormorantGaramond.ttf', 300)
-F_DISPLAY_IT = ('CormorantGaramond-Italic', 'CormorantGaramond-Italic.ttf', 400)
-F_TEXT = ('Inter-Light', '/usr/share/fonts/opentype/inter/Inter-Light.otf', None)
-F_TEXT_MED = ('Inter-Medium', '/usr/share/fonts/opentype/inter/Inter-Medium.otf', None)
-F_TEXT_REG = ('Inter-Regular', '/usr/share/fonts/opentype/inter/Inter-Regular.otf', None)
-
-texts = []   # dict(group, name, lines, font, size, color, x, y(baseline), leading, tracking)
-
-
-def T(group, name, lines, font, size, color, x, y, leading=None, tracking=0):
-    texts.append(dict(group=group, name=name, lines=lines, font=font, size=size, color=color,
-                      x=x, y=y, leading=leading or int(size * 1.25), tracking=tracking))
-
-
-LX = 200
-T('Заголовок', 'Надзаголовок', ['КОВОРКИНГ · ЦЕНТР МОСКВЫ'], F_TEXT_MED, 30, MUTED, LX, 520, tracking=180)
-T('Заголовок', 'Заголовок', ['Текстурная', 'доска'], F_DISPLAY, 210, INK, LX, 740, leading=190)
-T('Заголовок', 'Подводка', ['Историческая оболочка — лепнина', 'и паркет — встречается с цветным',
-                           'стеклом, бархатом и золотом', 'советской мозаики.'],
-  F_TEXT, 38, INK, LX, 1110, leading=60)
-T('Палитра', 'Палитра — подпись', ['ПАЛИТРА'], F_TEXT_MED, 28, MUTED, LX, 1520, tracking=180)
-
-circles = []
-PD, PSP = 130, 222
-for i, (nm, hx) in enumerate(PALETTE):
-    cx = LX + PD // 2 + (i % 4) * PSP
-    cy = 1640 + (i // 4) * 330
-    circles.append(dict(name=nm, hex=hx, cx=cx, cy=cy, d=PD))
-    T('Палитра', 'Цвет — ' + nm, [nm], F_TEXT_REG, 24, INK, cx - PD // 2, cy + PD // 2 + 56)
-    T('Палитра', 'HEX — ' + nm, [hx], F_TEXT, 22, MUTED, cx - PD // 2, cy + PD // 2 + 92)
-
-images = []   # dict(group, name, file, x, y, blend, opacity, smart)
-for i, (num, name, desc, zone, fn) in enumerate(SWATCHES):
-    x, y = COLS[i % 4], ROWS[i // 4]
-    g = f'{num} {name}'
-    slug = f'swatch-{num}'
-    if fn:
-        shadow().save(os.path.join(LAY, f'{slug}-shadow.png'))
-        images.append(dict(group=g, name='Тень', file=f'{slug}-shadow.png', x=x - 90, y=y - 90 + 16,
-                           blend='multiply', opacity=100, smart=False))
-        fn().save(os.path.join(LAY, f'{slug}.png'))
-        images.append(dict(group=g, name=f'Образец — {name}', file=f'{slug}.png', x=x, y=y,
-                           blend='normal', opacity=100, smart=True))
-    else:
-        sw_placeholder().save(os.path.join(LAY, f'{slug}.png'))
-        images.append(dict(group=g, name='Пустой слот', file=f'{slug}.png', x=x, y=y,
-                           blend='normal', opacity=100, smart=False))
-    by = y + CELL + 84
-    T(g, 'Номер', [num], F_DISPLAY_IT, 64, ACCENT, x, by)
-    T(g, 'Название', [name], F_TEXT_MED, 32, INK, x + 78, by - 6)
-    T(g, 'Описание', desc, F_TEXT, 26, INK, x + 78, by + 44, leading=38)
-    if zone:
-        T(g, 'Зона', [zone.upper()], F_TEXT_MED, 19, MUTED, x + 78, by + 44 + 38 * len(desc) + 14, tracking=140)
-
-SPEC = dict(width=W, height=H, resolution=300, background='#FFFFFF',
-            images=images, texts=texts, circles=circles, title='Текстурная доска')
-
-
 # ---------------------------------------------------------------- preview
 def pil_font(f, size):
     path = f[1] if os.path.isabs(f[1]) else os.path.join(FONTS, f[1])
@@ -430,7 +349,10 @@ def write_jsx():
         fh.write('﻿' + JSX.replace('__SPEC__', json.dumps(SPEC, ensure_ascii=False, indent=1)))
 
 
+SPEC_SRC = "# ---------------------------------------------------------------- spec\nGRID_X0 = W - 180 - (4 * CELL + 3 * 64)   # 1216\nCOLS = [GRID_X0 + i * (CELL + 64) for i in range(4)]\nROWS = [470, 470 + CELL + 300]\n\nSWATCHES = [\n    ('01', 'Лепнина', ['гипс, тёплая белая', 'матовая краска'], 'потолки · карнизы', sw_stucco),\n    ('02', 'Лиловое стекло', ['рифлёное и гладкое,', 'тонированное'], 'ресепшен · кабины', sw_glass),\n    ('03', 'Паркет «ёлочка»', ['дуб, медовый тон,', 'масло'], 'рабочая зона', sw_parquet),\n    ('04', 'Бархат', ['мохер, горчичный'], 'кресло с оттоманкой', sw_velvet),\n    ('05', 'Цементная плитка', ['графит и беж,', 'диагональ'], 'мини-кухня', sw_cement),\n    ('06', 'Латунь', ['шлифованная,', 'тёплый тон'], 'детали · свет · панно', sw_brass),\n    ('07', 'Золотая смальта', ['мозаика в духе', '«Новослободской»'], 'панно', sw_smalt),\n    ('08', 'Хром', ['полированная сталь,', 'зеркальный блеск'], 'рабочие кресла', sw_chrome),\n]\n\nPALETTE = [\n    ('Тёплый белый', '#EFE6DC'), ('Лиловое стекло', '#B79AC8'),\n    ('Медовый дуб', '#C8976A'), ('Горчичный', '#B57E1F'),\n    ('Латунь', '#B08D57'), ('Бирюза', '#1F8A93'),\n    ('Графит', '#3B4046'), ('Хром', '#C4C8CE'),\n]\n\nF_DISPLAY = ('CormorantGaramond-Light', 'CormorantGaramond.ttf', 300)\nF_DISPLAY_IT = ('CormorantGaramond-Italic', 'CormorantGaramond-Italic.ttf', 400)\nF_TEXT = ('Inter-Light', '/usr/share/fonts/opentype/inter/Inter-Light.otf', None)\nF_TEXT_MED = ('Inter-Medium', '/usr/share/fonts/opentype/inter/Inter-Medium.otf', None)\nF_TEXT_REG = ('Inter-Regular', '/usr/share/fonts/opentype/inter/Inter-Regular.otf', None)\n\ntexts = []   # dict(group, name, lines, font, size, color, x, y(baseline), leading, tracking)\n\n\ndef T(group, name, lines, font, size, color, x, y, leading=None, tracking=0):\n    texts.append(dict(group=group, name=name, lines=lines, font=font, size=size, color=color,\n                      x=x, y=y, leading=leading or int(size * 1.25), tracking=tracking))\n\n\nLX = 200\nT('Заголовок', 'Надзаголовок', ['КОВОРКИНГ · ЦЕНТР МОСКВЫ'], F_TEXT_MED, 30, MUTED, LX, 520, tracking=180)\nT('Заголовок', 'Заголовок', ['Текстурная', 'доска'], F_DISPLAY, 210, INK, LX, 740, leading=190)\nT('Заголовок', 'Подводка', ['Историческая оболочка — лепнина', 'и паркет — встречается с цветным',\n                           'стеклом, бархатом и золотом', 'советской мозаики.'],\n  F_TEXT, 38, INK, LX, 1110, leading=60)\nT('Палитра', 'Палитра — подпись', ['ПАЛИТРА'], F_TEXT_MED, 28, MUTED, LX, 1520, tracking=180)\n\ncircles = []\nPD, PSP = 130, 222\nfor i, (nm, hx) in enumerate(PALETTE):\n    cx = LX + PD // 2 + (i % 4) * PSP\n    cy = 1640 + (i // 4) * 330\n    circles.append(dict(name=nm, hex=hx, cx=cx, cy=cy, d=PD))\n    T('Палитра', 'Цвет — ' + nm, [nm], F_TEXT_REG, 24, INK, cx - PD // 2, cy + PD // 2 + 56)\n    T('Палитра', 'HEX — ' + nm, [hx], F_TEXT, 22, MUTED, cx - PD // 2, cy + PD // 2 + 92)\n\nimages = []   # dict(group, name, file, x, y, blend, opacity, smart)\nfor i, (num, name, desc, zone, fn) in enumerate(SWATCHES):\n    x, y = COLS[i % 4], ROWS[i // 4]\n    g = f'{num} {name}'\n    slug = f'swatch-{num}'\n    if fn:\n        shadow().save(os.path.join(LAY, f'{slug}-shadow.png'))\n        images.append(dict(group=g, name='Тень', file=f'{slug}-shadow.png', x=x - 90, y=y - 90 + 16,\n                           blend='multiply', opacity=100, smart=False))\n        fn().save(os.path.join(LAY, f'{slug}.png'))\n        images.append(dict(group=g, name=f'Образец — {name}', file=f'{slug}.png', x=x, y=y,\n                           blend='normal', opacity=100, smart=True))\n    else:\n        sw_placeholder().save(os.path.join(LAY, f'{slug}.png'))\n        images.append(dict(group=g, name='Пустой слот', file=f'{slug}.png', x=x, y=y,\n                           blend='normal', opacity=100, smart=False))\n    by = y + CELL + 84\n    T(g, 'Номер', [num], F_DISPLAY_IT, 64, ACCENT, x, by)\n    T(g, 'Название', [name], F_TEXT_MED, 32, INK, x + 78, by - 6)\n    T(g, 'Описание', desc, F_TEXT, 26, INK, x + 78, by + 44, leading=38)\n    if zone:\n        T(g, 'Зона', [zone.upper()], F_TEXT_MED, 19, MUTED, x + 78, by + 44 + 38 * len(desc) + 14, tracking=140)\n\nSPEC = dict(width=W, height=H, resolution=300, background='#FFFFFF',\n            images=images, texts=texts, circles=circles, title='Текстурная доска')\n\n\n"
+
 if __name__ == '__main__':
+    exec(SPEC_SRC)
     render_preview()
     write_jsx()
     print('ok', OUT)
