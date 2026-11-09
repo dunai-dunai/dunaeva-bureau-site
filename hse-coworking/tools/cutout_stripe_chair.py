@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw, ImageFilter
 import numpy as np, sys
-SP='/tmp/claude-0/-home-user-dunaeva-bureau-site/a21c98c5-6b86-5b58-a723-768b8d381088/scratchpad/'
+SP=''  # folder with bgmask.npy (flood fill of the white backdrop)
 src=Image.open('source/04-stripe-chair.jpg').convert('RGB')
 c=np.asarray(src,np.float32)
 m=np.load(SP+'bgmask.npy')
