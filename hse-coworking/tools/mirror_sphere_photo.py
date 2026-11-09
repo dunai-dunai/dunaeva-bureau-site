@@ -22,7 +22,7 @@ IH, IW = img.shape[:2]
 FOV = math.radians(84)                         # horizontal field of view of the picture
 f = (IW / 2) / math.tan(FOV / 2)
 
-SS = 3; N = D * SS
+SS = 3 if D <= 1000 else 1; N = D * SS
 y, x = np.mgrid[0:N, 0:N].astype(np.float32)
 x = (x + .5) / N * 2 - 1; y = (y + .5) / N * 2 - 1
 rho = np.sqrt(x * x + y * y); inside = rho <= 1
